@@ -1,4 +1,4 @@
-## Kryptographer [![](https://jitpack.io/v/com.sonhvp/cryptographer.svg)](https://jitpack.io/#com.sonhvp/cryptographer)
+## Kryptographer [![](https://jitpack.io/v/com.sonhvp/kryptographer.svg)](https://jitpack.io/#com.sonhvp/kryptographer)
 ### Gradle Setup
 In your project level build.gradle
 ```gradle
@@ -11,7 +11,7 @@ allprojects {
 In your app level build.gradle
 ```gradle
 dependencies {
-    implementation 'com.sonhvp:cryptographer:1.0.1'
+    implementation 'com.sonhvp:kryptographer:0.0.1'
 }
 ```
 By default, library uses asymmetric key with RSA/ECB/PKCS1Padding and symmetric key with AES/CBC/PKCS7Padding to encrypt/decrypt data.
