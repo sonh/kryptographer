@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("cryptographer", "startTime: ${startTime.get(Calendar.YEAR)} \nendTime: ${endTime.get(Calendar.YEAR)}")
 
-        Kryptographer.initWithDefaultKeys(this@MainActivity)
-
         updateUI()
 
         encrypt_btn.setOnClickListener {
