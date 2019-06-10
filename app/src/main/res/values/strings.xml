@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Kryptographer</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="data_hint">Data</string>
+    <string name="encrypt">Encrypt</string>
+    <string name="decrypt">Decrypt</string>
+    <string name="key_aliases">Key aliases</string>
+    <string name="show_all_key_hint">Show all key aliases</string>
+    <string name="add_asymmetric_key_hint">Add asymmetric key</string>
+    <string name="add_symmetric_key_hint">Add symmetric key</string>
+    <string name="delete_key">Delete all keys</string>
+    <string name="delete_all_key_warning">Delete all keys?</string>
+    <string name="add_asymmetric_key">Add asymmetric key</string>
+    <string name="add_symmetric_key">Add symmetric key</string>
+</resources>
