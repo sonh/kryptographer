@@ -1,4 +1,4 @@
-## Cryptographer [![](https://jitpack.io/v/com.sonhvp/cryptographer.svg)](https://jitpack.io/#com.sonhvp/cryptographer)
+## Kryptographer [![](https://jitpack.io/v/com.sonhvp/cryptographer.svg)](https://jitpack.io/#com.sonhvp/cryptographer)
 ### Gradle Setup
 In your project level build.gradle
 ```gradle
@@ -14,70 +14,72 @@ dependencies {
     implementation 'com.sonhvp:cryptographer:1.0.1'
 }
 ```
-### Basic Usage
-By default, library uses asymmetric key with RSA/ECB/PKCS1Padding in Android API 19-22 and symmetric key with AES/CBC/PKCS7Padding in Android API 23 and higher to encrypt/decrypt data.  
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private val cryptographer by lazy { initCryptographer() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val text = "123$%^{}@abc"
-        val encryptedText = cryptographer.encrypt(text)
-        val decryptedText = cryptographer.decrypt(encryptedText)
-    }
-}
-```
+By default, library uses asymmetric key with RSA/ECB/PKCS1Padding and symmetric key with AES/CBC/PKCS7Padding to encrypt/decrypt data.
 
 | API 19-22 | API 23+ |
 | --- | --- |
 | Asymmetric Key (2048 bits) | Symmetric Key (256 bits) |
 | RSA/ECB/PKCS1Padding | AES/CBC/PKCS7Padding |
-
-### Advanced Usage
-If symmetricKey isn't initialized, only use asymmetric key to encrypt/decrypt.
+### Basic Usage
+Initialize in your Application.onCreate() method
 ```kotlin
-val startTime = Calendar.getInstance().time
-val endTime = Calendar.getInstance().apply { add(Calendar.YEAR, 20) }.time
-
-val cryptographer = initCryptographer {
-    asymmetricKey {
-        setAlias("MyAsymmetricKey")
-        setSubject(X500Principal("CN=Default"))
-        setSerialNumber(BigInteger.ONE)
-        setKeySize(2048)
-        setStartDate(startTime)
-        setEndDate(endTime)
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        symmetricKey("MySymmetricKey", KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT) {
-            setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-            setKeySize(256)
-            setRandomizedEncryptionRequired(false)
-            setKeyValidityStart(startTime)
-            setKeyValidityEnd(endTime)
-            setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-        }
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Kryptographer.initWithDefaultKeys(this@App)
     }
 }
-
-//Use defaultAsymmetricKey() or defaultSymmetricKey() to init default key
 ```
 ```kotlin
-//You can use your IV, only AES/CBC/PKCS7Padding cipher use IV to encrypt/decrypt
-cryptographer.encrypt("data", iv)
-cryptographer.decrypt("data", iv)
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
+        val text = "123$%^{}@abc"
+        val encryptedText = Kryptographer.defaultSymmetricKey().encrypt(text)
+        val decryptedText = Kryptographer.defaultSymmetricKey().decrypt(encryptedText)
+    }
+}
+```
+### Advanced Usage
+```kotlin
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Kryptographer.init(this@App)
+
+        Kryptographer.initKeys(
+            this@App,
+            asymmetricKey {
+                alias = "MyAsymmetricKey"
+            },
+            symmetricKey {
+                alias = "MySymmetricKey"
+            }
+        )
+    }
+}
+```
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val text = "123$%^{}@abc"
+        val encryptedText = Kryptographer.getKey("MyAsymmetricKey").encrypt(text)
+        val decryptedText = Kryptographer.getKey("MyAsymmetricKey").decrypt(encryptedText)
+    }
+}
+```
+```kotlin
 //Get key aliases
-val keyAliases = KeyManager.getKeyAliases()
+val keyAliases = Kryptographer.getKeyAliases()
 
 //Delete key
-KeyManager.deleteAllKey()
-KeyManager.deleteKey("alias")
+Kryptographer.deleteAllKeys()
+Kryptographer.deleteKey("alias")
 ```
 
 ### License
