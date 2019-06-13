@@ -16,7 +16,7 @@ dependencies {
 ```
 By default, library uses asymmetric key with RSA/ECB/PKCS1Padding and symmetric key with AES/CBC/PKCS7Padding to encrypt/decrypt data.
 
-| API 19-22 | API 23+ |
+| API 19+ | API 23+ |
 | --- | --- |
 | Asymmetric Key (2048 bits) | Symmetric Key (256 bits) |
 | RSA/ECB/PKCS1Padding | AES/CBC/PKCS7Padding |
@@ -83,6 +83,5 @@ Kryptographer.deleteKey("alias")
 ```
 
 ### License
-```
-Apache 2.0
-```
+Copyright 2019 Son Huynh.
+Licensed under the [Apache License, Version 2.0](LICENSE)
