@@ -1,11 +1,10 @@
 package com.sonhvp.app
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItems
@@ -13,7 +12,6 @@ import com.sonhvp.kryptographer.Kryptographer
 import com.sonhvp.kryptographer.key.spec.AsymmetricKeySpec
 import com.sonhvp.kryptographer.key.spec.SymmetricKeySpec
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,10 +19,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val startTime: Calendar = Calendar.getInstance()
+        /*val startTime: Calendar = Calendar.getInstance()
         val endTime: Calendar = Calendar.getInstance().apply { add(Calendar.YEAR, 24) }
+        Log.d("cryptographer", "startTime: ${startTime.get(Calendar.YEAR)} \nendTime: ${endTime.get(Calendar.YEAR)}")*/
 
-        Log.d("cryptographer", "startTime: ${startTime.get(Calendar.YEAR)} \nendTime: ${endTime.get(Calendar.YEAR)}")
+        /*Log.d("cryptographer", "asymmetric isInSecureHW: ${Kryptographer.defaultAsymmetricKey().isInsideSecureHardware()}")
+        Log.d("cryptographer", "symmetric isInSecureHW: ${Kryptographer.defaultSymmetricKey().isInsideSecureHardware()}")*/
 
         updateUI()
 

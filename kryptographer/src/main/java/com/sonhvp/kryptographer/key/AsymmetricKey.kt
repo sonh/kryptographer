@@ -1,8 +1,13 @@
 package com.sonhvp.kryptographer.key
 
+import android.os.Build
+import android.security.keystore.KeyInfo
 import android.util.Base64
+import androidx.annotation.RequiresApi
+import com.sonhvp.kryptographer.ANDROID_KEYSTORE
 import com.sonhvp.kryptographer.Kryptographer
 import com.sonhvp.kryptographer.log
+import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.Cipher
@@ -30,6 +35,13 @@ data class AsymmetricKey (
         val encryptedBytes = Base64.decode(encryptedData, Base64.NO_WRAP)
         val decryptedBytes = Kryptographer.rsaCipher.doFinal(encryptedBytes)
         return String(decryptedBytes)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun isInsideSecureHardware(): Boolean {
+        val factory = KeyFactory.getInstance(privateKey.algorithm, ANDROID_KEYSTORE)
+        val keyInfo = factory.getKeySpec(privateKey, KeyInfo::class.java)
+        return keyInfo.isInsideSecureHardware
     }
 
 }

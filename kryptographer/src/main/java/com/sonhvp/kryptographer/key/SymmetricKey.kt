@@ -1,18 +1,23 @@
 package com.sonhvp.kryptographer.key
 
+import android.os.Build
+import android.security.keystore.KeyInfo
 import android.util.Base64
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
+import com.sonhvp.kryptographer.ANDROID_KEYSTORE
 import com.sonhvp.kryptographer.Kryptographer
-import java.security.Key
 import java.security.SecureRandom
 import javax.crypto.Cipher
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec
 
 data class SymmetricKey (
     override val alias: String,
     override val type: String ,
     override val algorithm: String,
-    val key: Key
+    val key: SecretKey
 ) : CryptographicKey() {
 
     override fun encrypt(data: String, iv: ByteArray?): String {
@@ -54,6 +59,13 @@ data class SymmetricKey (
         val encryptedBytes = Base64.decode(encryptedData, Base64.NO_WRAP)
         val decryptedBytes = Kryptographer.aesCipher.doFinal(encryptedBytes)
         return String(decryptedBytes)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun isInsideSecureHardware(): Boolean {
+        val factory = SecretKeyFactory.getInstance(key.algorithm, ANDROID_KEYSTORE)
+        val keyInfo = factory.getKeySpec(key, KeyInfo::class.java) as KeyInfo
+        return keyInfo.isInsideSecureHardware
     }
 
 }

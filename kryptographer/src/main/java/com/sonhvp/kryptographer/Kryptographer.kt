@@ -15,10 +15,12 @@ import com.sonhvp.kryptographer.key.spec.addSymmetricKey
 import java.lang.Exception
 import java.security.*
 import javax.crypto.Cipher
+import javax.crypto.SecretKey
 
 object Kryptographer {
 
     private val keyStore: KeyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+
     internal lateinit var prefs: SharedPreferences
     //Ciphers
     internal val aesCipher: Cipher = Cipher.getInstance(AES_CIPHER)
@@ -74,7 +76,7 @@ object Kryptographer {
     private fun String.isAliasExists(): Boolean = keyStore.containsAlias(this)
     fun isKeyExists(alias: String): Boolean = keyStore.containsAlias(alias)
 
-    fun getKeyAliases(): MutableList<String> = Kryptographer.keyStore.aliases().toList().toMutableList()
+    fun getKeyAliases(): MutableList<String> = keyStore.aliases().toList().toMutableList()
     fun getAllKeys(): MutableList<CryptographicKey> = getKeyAliases().map { getKey(it) }.toMutableList()
 
     fun getKey(alias: String): CryptographicKey {
@@ -82,7 +84,7 @@ object Kryptographer {
             val key = keyStore.getKey(alias, null)
             return when (key.algorithm) {
                 KEY_RSA_ALGORITHM -> AsymmetricKey(alias, "asymmetric", key.algorithm, keyStore.getCertificate(alias).publicKey, key as PrivateKey)
-                KEY_AES_ALGORITHM -> SymmetricKey(alias, "symmetric", key.algorithm, key)
+                KEY_AES_ALGORITHM -> SymmetricKey(alias, "symmetric", key.algorithm, key as SecretKey)
                 else -> throw Exception("Key algorithm is not supported")
             }
         } else {
@@ -104,6 +106,10 @@ object Kryptographer {
         return true
     }
 
+    /**
+     * Delete keystore
+     * @param alias enter alias for key will be deleted
+     */
     fun deleteKey(alias: String): Boolean = if (alias.isAliasExists()) {
         keyStore.deleteEntry(alias)
         log("$alias key is deleted")

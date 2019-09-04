@@ -20,4 +20,5 @@ abstract class CryptographicKey {
      */
     abstract fun decrypt(encryptedData: String, iv: ByteArray? = null): String
 
+    abstract fun isInsideSecureHardware(): Boolean
 }
