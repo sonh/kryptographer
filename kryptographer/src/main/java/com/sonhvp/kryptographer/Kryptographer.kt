@@ -73,12 +73,33 @@ object Kryptographer {
         }
     }
 
+    /**
+     * Check this alias is exist or not
+     */
     private fun String.isAliasExists(): Boolean = keyStore.containsAlias(this)
+
+    /**
+     * Check this key is exist or not
+     */
     fun isKeyExists(alias: String): Boolean = keyStore.containsAlias(alias)
 
+    /**
+     * Get alias list
+     * @return alias list
+     */
     fun getKeyAliases(): MutableList<String> = keyStore.aliases().toList().toMutableList()
+
+    /**
+     * Get key list
+     * @return key list
+     */
     fun getAllKeys(): MutableList<CryptographicKey> = getKeyAliases().map { getKey(it) }.toMutableList()
 
+    /**
+     * Get key by alias
+     * @param alias key's alias
+     * @return asymmetric key or symmetric key
+     */
     fun getKey(alias: String): CryptographicKey {
         if (keyStore.containsAlias(alias)) {
             val key = keyStore.getKey(alias, null)
@@ -92,12 +113,41 @@ object Kryptographer {
         }
     }
 
+    /**
+     * Get default symmetric key
+     * Only available if default key has been initialized with initWithDefaultKeys() or initWithDefaultSymmetricKey()
+     * @see initWithDefaultKeys()
+     * @see initWithDefaultSymmetricKey()
+     * @return SymmetricKey
+     */
     fun defaultSymmetricKey(): SymmetricKey = getSymmetricKey(DEFAULT_SYMMETRIC_ALIAS)
+
+    /**
+     * Get default asymmetric key
+     * Only available if default key has been initialized with initWithDefaultKeys() or initWithDefaultAsymmetricKey()
+     * @see initWithDefaultKeys()
+     * @see initWithDefaultAsymmetricKey()
+     * @return AsymmetricKey
+     */
     fun defaultAsymmetricKey(): AsymmetricKey = getAsymmetricKey(DEFAULT_ASYMMETRIC_ALIAS)
 
+    /**
+     * Get symmetric key by alias
+     * @param alias key's alias
+     * @return SymmetricKey
+     */
     fun getSymmetricKey(alias: String): SymmetricKey = getKey(alias) as SymmetricKey
+    /**
+     * Get asymmetric key by alias
+     * @param alias key's alias
+     * @return AsymmetricKey
+     */
     fun getAsymmetricKey(alias: String): AsymmetricKey = getKey(alias) as AsymmetricKey
 
+    /**
+     * Delete all keys
+     * @return return true if success
+     */
     fun deleteAllKeys(): Boolean {
         keyStore.aliases().iterator().forEach {
             keyStore.deleteEntry(it)
@@ -107,8 +157,9 @@ object Kryptographer {
     }
 
     /**
-     * Delete keystore
+     * Delete key
      * @param alias enter alias for key will be deleted
+     * @return return true if success
      */
     fun deleteKey(alias: String): Boolean = if (alias.isAliasExists()) {
         keyStore.deleteEntry(alias)

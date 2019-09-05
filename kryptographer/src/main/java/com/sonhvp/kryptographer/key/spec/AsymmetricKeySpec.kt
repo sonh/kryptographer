@@ -11,6 +11,7 @@ import com.sonhvp.kryptographer.ANDROID_KEYSTORE
 import com.sonhvp.kryptographer.DEFAULT_ASYMMETRIC_ALIAS
 import com.sonhvp.kryptographer.KEY_RSA_ALGORITHM
 import com.sonhvp.kryptographer.log
+import java.lang.Exception
 import java.math.BigInteger
 import java.security.KeyPairGenerator
 import java.security.spec.AlgorithmParameterSpec
@@ -40,6 +41,10 @@ internal fun addAsymmetricKey(asymmetricKeySpec: AsymmetricKeySpec) {
 }
 
 internal fun addAsymmetricKey(context: Context, asymmetricKeySpec: AsymmetricKeySpec) {
+    when (asymmetricKeySpec.keySize) {
+        1024, 2048 -> {}
+        else -> throw Exception("Asymmetric Key with RSA only support 1024 and 2046 bit length")
+    }
     val keyPairSpec: AlgorithmParameterSpec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         initKeySpec(asymmetricKeySpec)
     } else {
