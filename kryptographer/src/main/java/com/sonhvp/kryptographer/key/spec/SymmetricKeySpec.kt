@@ -29,7 +29,7 @@ internal fun addSymmetricKey(symmetricKeySpec: SymmetricKeySpec) {
         128, 256 -> {
 
         }
-        else -> throw Exception("")
+        else -> throw Exception("Symmetric Key with AES only support 128 and 256 bit length")
     }
     val keyGenParamSpec = KeyGenParameterSpec.Builder(
         symmetricKeySpec.alias,
