@@ -73,12 +73,33 @@ object Kryptographer {
         }
     }
 
+    /**
+     * Check this alias is exist or not
+     */
     private fun String.isAliasExists(): Boolean = keyStore.containsAlias(this)
+
+    /**
+     * Check this key is exist or not
+     */
     fun isKeyExists(alias: String): Boolean = keyStore.containsAlias(alias)
 
+    /**
+     * Get alias list
+     * @return alias list
+     */
     fun getKeyAliases(): MutableList<String> = keyStore.aliases().toList().toMutableList()
+
+    /**
+     * Get key list
+     * @return key list
+     */
     fun getAllKeys(): MutableList<CryptographicKey> = getKeyAliases().map { getKey(it) }.toMutableList()
 
+    /**
+     * Get key by alias
+     * @param alias key's alias
+     * @return asymmetric key or symmetric key
+     */
     fun getKey(alias: String): CryptographicKey {
         if (keyStore.containsAlias(alias)) {
             val key = keyStore.getKey(alias, null)
