@@ -53,9 +53,11 @@ class App : Application() {
             this@App,
             asymmetricKey {
                 alias = "MyAsymmetricKey"
+                keySize = 1024
             },
             symmetricKey {
                 alias = "MySymmetricKey"
+                keySize = 128
             }
         )
     }
@@ -80,6 +82,8 @@ val keyAliases = Kryptographer.getKeyAliases()
 //Delete key
 Kryptographer.deleteAllKeys()
 Kryptographer.deleteKey("alias")
+//Check if the key resides inside secure hardware
+Kryptographer.getKey("MyAsymmetricKey).isInsideSecureHardware()
 ```
 
 ### License
