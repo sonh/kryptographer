@@ -11,7 +11,7 @@ allprojects {
 In your app level build.gradle
 ```gradle
 dependencies {
-    implementation 'com.sonhvp:kryptographer:0.0.1'
+    implementation 'com.sonhvp:kryptographer:0.5.0'
 }
 ```
 By default, library uses asymmetric key with RSA/ECB/PKCS1Padding and symmetric key with AES/CBC/PKCS7Padding to encrypt/decrypt data.
@@ -82,6 +82,7 @@ val keyAliases = Kryptographer.getKeyAliases()
 //Delete key
 Kryptographer.deleteAllKeys()
 Kryptographer.deleteKey("alias")
+
 //Check if the key resides inside secure hardware
 Kryptographer.getKey("MyAsymmetricKey).isInsideSecureHardware()
 ```
